@@ -18,7 +18,6 @@
 	//Detective Work, used for the duplicate data points kept in the scanners
 	var/list/original_atom
 
-
 /*
 We actually care what this returns, since it can return different directives.
 Not specifically here, but in other variations of this. As a general safety,
@@ -38,8 +37,18 @@ directive is properly returned.
 	return
 
 //===========================================================================
+#define STAT_SLEEP 1
+/*
+Byond calls stat on atoms every tick, this code prevents that from happening due to the fact that it can cause significant overhead, see http://www.byond.com/docs/ref/info.html#/client/proc/Stat for more info.
+NB changing the sleep time may cause issues and should only be done for debugging! 
+Ported from this PR.https://github.com/tgstation/tgstation/pull/12165/files
+*/
+//===========================================================================
+/atom/Stat()
+	. = ..()
+	sleep(STAT_SLEEP)
 
-
+//===========================================================================
 
 //atmos procs
 
