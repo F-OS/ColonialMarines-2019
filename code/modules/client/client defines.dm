@@ -59,3 +59,17 @@
 
 
 	preload_rsc = 0 // This is 0 so we can set it to an URL once the player logs in and have them download the resources from a different server.
+
+
+#define STAT_SLEEP 1
+/*
+Byond calls stat on atoms every tick, this code prevents that from happening due to the fact that it can cause significant overhead, see http://www.byond.com/docs/ref/info.html#/client/proc/Stat for more info.
+NB changing the sleep time may cause issues and should only be done for debugging! 
+Ported from this PR.https://github.com/tgstation/tgstation/pull/12165/files
+*/
+//===========================================================================
+/client/Stat()
+	. = ..()
+	sleep(STAT_SLEEP)
+
+//===========================================================================
