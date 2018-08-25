@@ -518,6 +518,32 @@ Turf and target are seperate in case you want to teleport some distance from a t
 		creatures[name] = M
 
 	return creatures
+	
+/proc/getlivinghumans()
+	var/list/mobs = sorthumans()
+	var/list/names = list()
+	var/list/creatures = list()
+	var/list/namecounts = list()
+	for(var/mob/M in mobs)
+		if(isYautja(M)) continue
+		if(iszombie(M))	continue
+		var/name = M.name
+		if (name in names)
+			namecounts[name]++
+			name = "[name] ([namecounts[name]])"
+		else
+			names.Add(name)
+			namecounts[name] = 1
+		if (M.real_name && M.real_name != M.name)
+			name += " \[[M.real_name]\]"
+		if (M.stat == 2)
+			continue
+		if(!M.ckey)
+			continue
+		creatures[name] = M
+
+	return creatures
+
 
 //Orders mobs by type then by name
 /proc/sortmobs()
