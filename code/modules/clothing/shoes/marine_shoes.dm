@@ -8,6 +8,7 @@
 	armor = list(melee = 60, bullet = 40, laser = 10,energy = 10, bomb = 10, bio = 10, rad = 0)
 	flags_cold_protection = FEET
 	flags_heat_protection = FEET
+	flags_inventory = NOSLIPPING
 	min_cold_protection_temperature = SHOE_min_cold_protection_temperature
 	max_heat_protection_temperature = SHOE_max_heat_protection_temperature
 	siemens_coefficient = 0.7
