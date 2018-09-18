@@ -1,0 +1,73 @@
+/datum/emergency_call/marines
+	name = "Marines"
+	mob_max = 8
+	probability = 30
+  var/has_SG = 0
+
+	New()
+		..()
+		arrival_message = "[MAIN_SHIP_NAME], this is the USS Nebraska responding to your distress call. We are sending a detachment aboard."
+		objectives = "Help your fellow marines on the [MAIN_SHIP_NAME]. Do what the CO says and ensure the survival of the crew at all costs."
+
+
+
+/datum/emergency_call/marines/print_backstory(mob/living/carbon/human/mob)
+	to_chat(mob, "<B> You are a marine!</b>")
+	to_chat(mob, "<B> Your job is to respond to the distress beacon launched by the [MAIN_SHIP_NAME].</b>")
+	to_chat(mob, "<B> Ensure the survival of their crew at all costs.</b>")
+
+
+
+/datum/emergency_call/marines/create_member(datum/mind/M)
+	var/turf/spawn_loc = get_spawn_point()
+	var/mob/original = M.current
+
+	if(!istype(spawn_loc)) return //Didn't find a useable spawn point.
+
+	var/mob/living/carbon/human/mob = new(spawn_loc)
+	mob.gender = pick(60;MALE,40;FEMALE)
+	var/datum/preferences/A = new()
+	A.randomize_appearance_for(mob)
+	var/list/first_names_mcol = list("Alan","Jack","Bil","Jonathan","John","Shiro","Gareth","Clark","Sam", "Lionel", "Aaron", "Charlie", "Scott", "Winston", "Aidan", "Ellis", "Mason", "Wesley", "Nicholas", "Calvin", "Nishikawa", "Hiroto", "Chiba", "Ouchi", "Furuse", "Takagi", "Oba", "Kishimoto")
+	var/list/first_names_fcol = list("Emma", "Adelynn", "Mary", "Halie", "Chelsea", "Lexie", "Arya", "Alicia", "Selah", "Amber", "Heather", "Myra", "Heidi", "Charlotte", "Ashley", "Raven", "Tori", "Anne", "Madison", "Oliva", "Lydia", "Tia", "Riko", "Ari", "Machida", "Ueki", "Mihara", "Noda")
+	var/list/last_names_col = list("Hawkins","Rickshaw","Elliot","Billard","Cooper","Fox", "Barlow", "Barrows", "Stewart", "Morgan", "Green", "Stone", "Titan", "Crowe", "Krantz", "Pathillo", "Driggers", "Burr", "Hunt", "Yuko", "Gesshin", "Takanibu", "Tetsuzan", "Tomomi", "Bokkai", "Takesi")
+	if(mob.gender == MALE)
+		mob.real_name = "[pick(first_names_mcol)] [pick(last_names_col)]"
+		mob.f_style = "5 O'clock Shadow"
+	else
+		mob.real_name = "[pick(first_names_fcol)] [pick(last_names_col)]"
+	mob.name = mob.real_name
+	mob.age = rand(20,45)
+	mob.dna.ready_dna(mob)
+	mob.r_hair = 25
+	mob.g_hair = 25
+	mob.b_hair = 35
+	mob.key = M.key
+	if(mob.client) mob.client.change_view(world.view)
+	mob.mind.assigned_role = "MODE"
+	mob.mind.special_role = "Marine"
+	ticker.mode.traitors += mob.mind
+
+	spawn(0)
+		if(!leader)       //First one spawned is always the leader.
+			leader = mob
+			mob.mind.set_cm_skills(/datum/skills/SL)
+			mob.arm_equipment(mob, "Freelancer (Leader)")
+			to_chat(mob, "<font size='3'>\red You are the Freelancer leader!</font>")
+
+		else if(medics < max_medics)
+			mob.mind.set_cm_skills(/datum/skills/combat_medic)
+			mob.arm_equipment(mob, "Freelancer (Medic)")
+			medics++
+			to_chat(mob, "<font size='3'>\red You are a Freelancer medic!</font>")
+		else if(has_SG == 0)
+    else
+			mob.arm_equipment(mob, "USCM Private")
+			to_chat(mob, "<font size='3'>\red You are a Standard Marine!</font>")
+		print_backstory(mob)
+
+	spawn(10)
+		to_chat(M, "<B>Objectives:</b> [objectives]")
+
+	if(original)
+		cdel(original)
