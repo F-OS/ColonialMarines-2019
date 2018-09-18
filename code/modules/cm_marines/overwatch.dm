@@ -524,12 +524,12 @@
 			if(!only_leader)
 				if(plus_name)
 					M << sound('sound/effects/radiostatic.ogg')
-				to_chat(M, "\icon[src] <font color='blue'><B>\[Overwatch\]:</b> [nametext][text]</font>")
+				to_chat(M, "\icon[src] <font color='blue' size='3'><B>\[Overwatch\]:</b> [nametext][text]</font>")
 			else
 				if(current_squad.squad_leader == M)
 					if(plus_name)
 						M << sound('sound/effects/radiostatic.ogg')
-					to_chat(M, "\icon[src] <font color='blue'><B>\[SL Overwatch\]:</b> [nametext][text]</font>")
+					to_chat(M, "\icon[src] <font color='blue' size='3'><B>\[SL Overwatch\]:</b> [nametext][text]</font>")
 					return
 
 /obj/machinery/computer/overwatch/proc/handle_bombard()
