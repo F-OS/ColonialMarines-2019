@@ -221,7 +221,6 @@
 			for(var/mob/O in hearers(src, null))
 				O.show_message(message, m_type)
 
-	if(player_caused)
-		emotedown = 1
-		spawn(50)
-			emotedown = 0
+	emotedown = 1
+	spawn(50)
+		emotedown = 0
