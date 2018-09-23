@@ -359,18 +359,27 @@
 	point_cost = 350 // Not as expensive as actual weaponry but still a hefty sum so we don't have this spammed everywhere
 
 /obj/structure/ship_ammo/minirocket/illumination/detonate_on(turf/impact)
+	var/turf/T = impact
 	impact.ceiling_debris_check(2)
 	spawn(5)
-		var/turf/T = pick(range(5, impact))
-		explosion(T,-1,-1,1, 2, 0)// Smaller explosion to prevent this becoming the PO meta
+		explosion(impact,-1,-1,1, 2, 0)// Smaller explosion to prevent this becoming the PO meta
 		var/datum/effect_system/expl_particles/P = new/datum/effect_system/expl_particles()
-		P.set_up(4, 0, T)
+		P.set_up(4, 0, impact)
 		P.start()
 		spawn(5)
 			var/datum/effect_system/smoke_spread/S = new/datum/effect_system/smoke_spread()
-			S.set_up(1,0,T,null)
+			S.set_up(1,0,impact,null)
 			S.start()
 		spawn(10)
+			T = locate(impact.x - 10, impact.y, impact.z)
+			new/obj/item/device/flashlight/flare/on/cas(T)
+			T = locate(impact.x + 10, impact.y, impact.z)
+			new/obj/item/device/flashlight/flare/on/cas(T)
+			T = locate(impact.x, impact.y - 10, impact.z)
+			new/obj/item/device/flashlight/flare/on/cas(T)
+			T = locate(impact.x, impact.y + 10, impact.z)
+			new/obj/item/device/flashlight/flare/on/cas(T)
+			T = locate(impact.x, impact.y, impact.z)
 			new/obj/item/device/flashlight/flare/on/cas(T)
 		if(!ammo_count && loc)
 			cdel(src) //deleted after last minirocket is fired and impact the ground.
