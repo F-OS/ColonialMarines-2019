@@ -306,7 +306,7 @@ Status: []<BR>"},
 				if(prob(50)) new /obj/item/device/assembly/prox_sensor(locate(x,y,z))
 			else
 				to_chat(user, "You remove the turret but did not manage to salvage anything.")
-			del(src)
+			cdel(src)
 
 
 	if ((istype(W, /obj/item/weapon/card/emag)) && (!src.emagged))
@@ -400,7 +400,7 @@ Status: []<BR>"},
 
 /obj/machinery/porta_turret/ex_act(severity)
 	if(severity >= 3) // turret dies if an explosion touches it!
-		del(src)
+		cdel(src)
 	else
 		src.die()
 
@@ -696,7 +696,7 @@ Status: []<BR>"},
 				playsound(src.loc, 'sound/items/Crowbar.ogg', 75, 1)
 				to_chat(user, "You dismantle the turret construction.")
 				new /obj/item/stack/sheet/metal( loc, 5)
-				del(src)
+				cdel(src)
 				return
 
 		if(1)
@@ -749,7 +749,7 @@ Status: []<BR>"},
 				gun_charge = E.power_supply.charge // the gun's charge is stored in src.gun_charge
 				to_chat(user, "\blue You add \the [W] to the turret.")
 				build_step = 4
-				del(W) // delete the gun :(
+				cdel(W) // delete the gun :(
 				return
 
 			else if(istype(W, /obj/item/weapon/wrench))
@@ -762,7 +762,7 @@ Status: []<BR>"},
 			if(isprox(W))
 				build_step = 5
 				to_chat(user, "\blue You add the prox sensor to the turret.")
-				del(W)
+				cdel(W)
 				return
 
 			// attack_hand() removes the gun
